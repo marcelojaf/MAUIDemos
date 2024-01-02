@@ -3,20 +3,31 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MAUIDemos.Views.CollectionViewPage"
              Title="CollectionViewPage">
-<ContentPage.Content>
+    <ContentPage.Content>
         <CollectionView x:Name="collectionCountries" ItemsLayout="VerticalList" SelectionMode="Single">
+            <CollectionView.Header>
+                <VerticalStackLayout BackgroundColor="LightGray" Padding="10">
+                    <Label Text="Countries" FontSize="Large" FontAttributes="Bold" HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+            </CollectionView.Header>
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <VerticalStackLayout BackgroundColor="Bisque" Padding="5" Margin="5">
-                        <Label Text="{Binding .}" HorizontalOptions="Center"/>
+                    <Frame Margin="10">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="8*"/>
+                            </Grid.ColumnDefinitions>
 
-                    </VerticalStackLayout>
-
+                            <Image Grid.Column="0" Source="{Binding FlagUrl}" Aspect="AspectFit"/>
+                            <VerticalStackLayout Grid.Column="1" Grid.Row="0" Padding="5" VerticalOptions="Center">
+                                <Label Text="{Binding Name}" FontSize="Medium" FontAttributes="Bold"/>
+                                <Label Text="{Binding IsoCode}" FontAttributes="Italic"/>
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Frame>
                 </DataTemplate>
-
             </CollectionView.ItemTemplate>
-
         </CollectionView>
-
     </ContentPage.Content>
 </ContentPage>
