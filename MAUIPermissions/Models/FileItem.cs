@@ -2,9 +2,15 @@
 
 namespace MAUIPermissions.Models
 {
+    /// <summary>
+    /// Represents an attached file item.
+    /// </summary>
     public class FileItem : ObservableObject
     {
         private string _name;
+        /// <summary>
+        /// Name of the file.
+        /// </summary>
         public string Name
         {
             get => _name;
@@ -12,6 +18,9 @@ namespace MAUIPermissions.Models
         }
 
         private ImageSource _imageSource;
+        /// <summary>
+        /// Source of the image if the file is an image.
+        /// </summary>
         public ImageSource ImageSource
         {
             get => _imageSource;
@@ -19,6 +28,9 @@ namespace MAUIPermissions.Models
         }
 
         private string _fileIcon;
+        /// <summary>
+        /// Icon representing the file type.
+        /// </summary>
         public string FileIcon
         {
             get => _fileIcon;
@@ -26,6 +38,9 @@ namespace MAUIPermissions.Models
         }
 
         private string _contentType;
+        /// <summary>
+        /// Content type of the file.
+        /// </summary>
         public string ContentType
         {
             get => _contentType;
@@ -33,6 +48,9 @@ namespace MAUIPermissions.Models
         }
 
         private Stream _content;
+        /// <summary>
+        /// Content of the file as a stream.
+        /// </summary>
         public Stream Content
         {
             get => _content;
@@ -40,6 +58,9 @@ namespace MAUIPermissions.Models
         }
 
         private string _path;
+        /// <summary>
+        /// Path to the file.
+        /// </summary>
         public string Path
         {
             get => _path;
@@ -47,6 +68,9 @@ namespace MAUIPermissions.Models
         }
 
         private bool _isImage;
+        /// <summary>
+        /// Indicates whether the file is an image.
+        /// </summary>
         public bool IsImage
         {
             get => _isImage;

@@ -8,7 +8,6 @@
 
     <ScrollView>
         <VerticalStackLayout Padding="30,0" Spacing="25">
-
             <Label
                 SemanticProperties.HeadingLevel="Level1"
                 Style="{StaticResource Headline}"
@@ -22,13 +21,32 @@
 
             <Button
                 x:Name="BtnGallery"
+                Command="{Binding AttachFromGalleryCommand}"
                 HorizontalOptions="Fill"
-                Text="Camera" />
+                Text="Gallery" />
 
             <Button
                 x:Name="BtnFiles"
+                Command="{Binding AttachFromFileCommand}"
                 HorizontalOptions="Fill"
-                Text="Camera" />
+                Text="Files" />
+
+            <ListView HasUnevenRows="True" ItemsSource="{Binding Attachments}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout Padding="10">
+                                <Label FontAttributes="Bold" Text="{Binding Name}" />
+                                <Image
+                                    HeightRequest="100"
+                                    IsVisible="{Binding IsImage}"
+                                    Source="{Binding ImageSource}" />
+                                <Label FontSize="Small" Text="{Binding Path}" />
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
         </VerticalStackLayout>
     </ScrollView>
 

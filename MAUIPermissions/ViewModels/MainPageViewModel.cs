@@ -5,23 +5,49 @@ using System.Collections.ObjectModel;
 
 namespace MAUIPermissions.ViewModels
 {
+    /// <summary>
+    /// ViewModel for the MainPage.
+    /// </summary>
     public partial class MainPageViewModel : ObservableObject
     {
         public MainPageViewModel()
         {
+            Attachments = new ObservableCollection<FileItem>();
             AttachFromCameraCommand = new AsyncRelayCommand(AttachFromCamera);
+            AttachFromGalleryCommand = new AsyncRelayCommand(AttachFromGallery);
+            AttachFromFileCommand = new AsyncRelayCommand(AttachFromFile);
         }
 
         #region Properties
 
+        /// <summary>
+        /// Collection of attached files.
+        /// </summary>
         [ObservableProperty]
         private ObservableCollection<FileItem> attachments;
 
         #endregion
 
         #region Commands
+
+        /// <summary>
+        /// Command to attach a file from the camera.
+        /// </summary>
         public IAsyncRelayCommand AttachFromCameraCommand { get; }
 
+        /// <summary>
+        /// Command to attach a file from the gallery.
+        /// </summary>
+        public IAsyncRelayCommand AttachFromGalleryCommand { get; }
+
+        /// <summary>
+        /// Command to attach a file from the file system.
+        /// </summary>
+        public IAsyncRelayCommand AttachFromFileCommand { get; }
+
+        /// <summary>
+        /// Method to handle attaching a file from the camera.
+        /// </summary>
         private async Task AttachFromCamera()
         {
             // Get the current status of the Camera permission
@@ -47,16 +73,43 @@ namespace MAUIPermissions.ViewModels
 
                 if (photo != null)
                 {
-                    // save the file into local storage
+                    // Save the file into local storage
                     string localFilePath = Path.Combine(FileSystem.CacheDirectory, photo.FileName);
 
                     using Stream sourceStream = await photo.OpenReadAsync();
                     using FileStream localFileStream = File.OpenWrite(localFilePath);
 
                     await sourceStream.CopyToAsync(localFileStream);
+
+                    Attachments.Add(new FileItem
+                    {
+                        Name = photo.FileName,
+                        Path = localFilePath,
+                        ImageSource = ImageSource.FromFile(localFilePath),
+                        IsImage = true
+                    });
                 }
             }
         }
+
+        /// <summary>
+        /// Method to handle attaching a file from the gallery.
+        /// </summary>
+        private async Task AttachFromGallery()
+        {
+            // Implement similar logic as AttachFromCamera for gallery selection
+            // Add code for handling gallery attachment
+        }
+
+        /// <summary>
+        /// Method to handle attaching a file from the file system.
+        /// </summary>
+        private async Task AttachFromFile()
+        {
+            // Implement similar logic as AttachFromCamera for file selection
+            // Add code for handling file attachment
+        }
+
         #endregion
     }
 }
