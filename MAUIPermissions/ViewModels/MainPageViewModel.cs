@@ -98,12 +98,7 @@ namespace MAUIPermissions.ViewModels
         private async Task AttachFromGallery()
         {
             // Check and request storage permission if not granted
-            PermissionStatus storagePermissionStatus = await Permissions.CheckStatusAsync<Permissions.StorageRead>();
-
-            if (storagePermissionStatus != PermissionStatus.Granted)
-            {
-                storagePermissionStatus = await Permissions.RequestAsync<Permissions.StorageRead>();
-            }
+            PermissionStatus storagePermissionStatus = await CheckAndRequestStoragePermission();
 
             if (storagePermissionStatus != PermissionStatus.Granted)
             {
@@ -140,12 +135,7 @@ namespace MAUIPermissions.ViewModels
         private async Task AttachFromFile()
         {
             // Check and request storage permission if not granted
-            PermissionStatus storagePermissionStatus = await Permissions.CheckStatusAsync<Permissions.StorageRead>();
-
-            if (storagePermissionStatus != PermissionStatus.Granted)
-            {
-                storagePermissionStatus = await Permissions.RequestAsync<Permissions.StorageRead>();
-            }
+            PermissionStatus storagePermissionStatus = await CheckAndRequestStoragePermission();
 
             if (storagePermissionStatus != PermissionStatus.Granted)
             {
@@ -173,6 +163,36 @@ namespace MAUIPermissions.ViewModels
                     ImageSource = null,
                     IsImage = false
                 });
+            }
+        }
+
+        /// <summary>
+        /// Helper method to check and request storage permission.
+        /// </summary>
+        private async Task<PermissionStatus> CheckAndRequestStoragePermission()
+        {
+            // For Android 11 and above, we need to request READ_MEDIA_IMAGES for accessing photos
+            if (DeviceInfo.Platform == DevicePlatform.Android && DeviceInfo.Version.Major >= 11)
+            {
+                var status = await Permissions.CheckStatusAsync<Permissions.Media>();
+
+                if (status != PermissionStatus.Granted)
+                {
+                    status = await Permissions.RequestAsync<Permissions.Media>();
+                }
+
+                return status;
+            }
+            else
+            {
+                var status = await Permissions.CheckStatusAsync<Permissions.StorageRead>();
+
+                if (status != PermissionStatus.Granted)
+                {
+                    status = await Permissions.RequestAsync<Permissions.StorageRead>();
+                }
+
+                return status;
             }
         }
 
