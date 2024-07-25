@@ -7,48 +7,65 @@
     xmlns:viewModels="clr-namespace:MAUIPermissions.ViewModels"
     x:DataType="viewModels:MainPageViewModel">
 
-    <ScrollView>
-        <VerticalStackLayout Padding="30,0" Spacing="25">
-            <Label
-                SemanticProperties.HeadingLevel="Level1"
-                Style="{StaticResource Headline}"
-                Text="MAUI Permissions!" />
+    <Grid Padding="30,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
-            <Button
-                x:Name="BtnCamera"
-                Command="{Binding AttachFromCameraCommand}"
-                HorizontalOptions="Fill"
-                Text="Camera" />
+        <Label
+            Grid.Row="0"
+            Margin="0,0,0,25"
+            SemanticProperties.HeadingLevel="Level1"
+            Style="{StaticResource Headline}"
+            Text="MAUI Permissions!" />
 
-            <Button
-                x:Name="BtnGallery"
-                Command="{Binding AttachFromGalleryCommand}"
-                HorizontalOptions="Fill"
-                Text="Gallery" />
+        <Button
+            x:Name="BtnCamera"
+            Grid.Row="1"
+            Margin="0,0,0,10"
+            Command="{Binding AttachFromCameraCommand}"
+            HorizontalOptions="Fill"
+            Text="Camera" />
 
-            <Button
-                x:Name="BtnFiles"
-                Command="{Binding AttachFromFileCommand}"
-                HorizontalOptions="Fill"
-                Text="Files" />
+        <Button
+            x:Name="BtnGallery"
+            Grid.Row="2"
+            Margin="0,0,0,10"
+            Command="{Binding AttachFromGalleryCommand}"
+            HorizontalOptions="Fill"
+            Text="Gallery" />
 
-            <ListView HasUnevenRows="True" ItemsSource="{Binding Attachments}">
-                <ListView.ItemTemplate>
-                    <DataTemplate x:DataType="models:FileItem">
-                        <ViewCell>
-                            <StackLayout Padding="10">
-                                <Label FontAttributes="Bold" Text="{Binding Name}" />
-                                <Image
-                                    HeightRequest="100"
-                                    IsVisible="{Binding IsImage}"
-                                    Source="{Binding ImageSource}" />
-                                <Label FontSize="Small" Text="{Binding Path}" />
-                            </StackLayout>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-        </VerticalStackLayout>
-    </ScrollView>
+        <Button
+            x:Name="BtnFiles"
+            Grid.Row="3"
+            Margin="0,0,0,10"
+            Command="{Binding AttachFromFileCommand}"
+            HorizontalOptions="Fill"
+            Text="Files" />
+
+        <ListView
+            Grid.Row="4"
+            HasUnevenRows="True"
+            ItemsSource="{Binding Attachments}">
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="models:FileItem">
+                    <ViewCell>
+                        <StackLayout Padding="10">
+                            <Label FontAttributes="Bold" Text="{Binding Name}" />
+                            <Image
+                                HeightRequest="100"
+                                IsVisible="{Binding IsImage}"
+                                Source="{Binding ImageSource}" />
+                            <Label FontSize="Small" Text="{Binding Path}" />
+                        </StackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
 
 </ContentPage>

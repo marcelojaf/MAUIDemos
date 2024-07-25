@@ -29,3 +29,12 @@ Add this to the <manifest> node of your AndroidManifest.xml file:
     </intent>
 </queries>
 ```
+
+## iOS Setup
+Add this to your Info.plist file:
+```
+<key>NSCameraUsageDescription</key>
+<string>This application needs access to the camera to capture photos.</string>
+<key>NSPhotoLibraryUsageDescription</key>
+<string>This application needs access to the photo library to select images.</string>
+```
