@@ -3,6 +3,7 @@
     x:Class="MAUIPermissions.MainPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:models="clr-namespace:MAUIPermissions.Models"
     xmlns:viewModels="clr-namespace:MAUIPermissions.ViewModels"
     x:DataType="viewModels:MainPageViewModel">
 
@@ -33,7 +34,7 @@
 
             <ListView HasUnevenRows="True" ItemsSource="{Binding Attachments}">
                 <ListView.ItemTemplate>
-                    <DataTemplate>
+                    <DataTemplate x:DataType="models:FileItem">
                         <ViewCell>
                             <StackLayout Padding="10">
                                 <Label FontAttributes="Bold" Text="{Binding Name}" />
