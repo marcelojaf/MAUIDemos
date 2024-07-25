@@ -50,30 +50,25 @@ namespace MAUIPermissions.ViewModels
         /// </summary>
         private async Task AttachFromCamera()
         {
-            // Get the current status of the Camera permission
             PermissionStatus cameraPermissionStatus = await Permissions.CheckStatusAsync<Permissions.Camera>();
 
-            // If the Camera permission has not been granted, request it
             if (cameraPermissionStatus != PermissionStatus.Granted)
             {
                 cameraPermissionStatus = await Permissions.RequestAsync<Permissions.Camera>();
             }
 
-            // If the Camera permission is still denied, display an alert and do nothing
             if (cameraPermissionStatus != PermissionStatus.Granted)
             {
                 await App.Current.MainPage.DisplayAlert("Camera Permission", "Camera permission denied", "OK");
                 return;
             }
 
-            // If the Camera permission has been granted, take a photo
             if (MediaPicker.Default.IsCaptureSupported)
             {
                 FileResult photo = await MediaPicker.Default.CapturePhotoAsync();
 
                 if (photo != null)
                 {
-                    // Save the file into local storage
                     string localFilePath = Path.Combine(FileSystem.CacheDirectory, photo.FileName);
 
                     using Stream sourceStream = await photo.OpenReadAsync();
@@ -97,21 +92,36 @@ namespace MAUIPermissions.ViewModels
         /// </summary>
         private async Task AttachFromGallery()
         {
-            // Check and request storage permission if not granted
-            PermissionStatus storagePermissionStatus = await CheckAndRequestStoragePermission();
-
-            if (storagePermissionStatus != PermissionStatus.Granted)
+            if (DeviceInfo.Platform == DevicePlatform.iOS || DeviceInfo.Platform == DevicePlatform.MacCatalyst)
             {
-                await App.Current.MainPage.DisplayAlert("Storage Permission", "Storage permission denied", "OK");
-                return;
+                PermissionStatus photoPermissionStatus = await Permissions.CheckStatusAsync<Permissions.Photos>();
+
+                if (photoPermissionStatus != PermissionStatus.Granted)
+                {
+                    photoPermissionStatus = await Permissions.RequestAsync<Permissions.Photos>();
+                }
+
+                if (photoPermissionStatus != PermissionStatus.Granted)
+                {
+                    await App.Current.MainPage.DisplayAlert("Photo Permission", "Photo library permission denied", "OK");
+                    return;
+                }
+            }
+            else
+            {
+                PermissionStatus storagePermissionStatus = await CheckAndRequestStoragePermission();
+
+                if (storagePermissionStatus != PermissionStatus.Granted)
+                {
+                    await App.Current.MainPage.DisplayAlert("Storage Permission", "Storage permission denied", "OK");
+                    return;
+                }
             }
 
-            // Pick a photo from the gallery
             FileResult photo = await MediaPicker.Default.PickPhotoAsync();
 
             if (photo != null)
             {
-                // Save the file into local storage
                 string localFilePath = Path.Combine(FileSystem.CacheDirectory, photo.FileName);
 
                 using Stream sourceStream = await photo.OpenReadAsync();
@@ -134,21 +144,36 @@ namespace MAUIPermissions.ViewModels
         /// </summary>
         private async Task AttachFromFile()
         {
-            // Check and request storage permission if not granted
-            PermissionStatus storagePermissionStatus = await CheckAndRequestStoragePermission();
-
-            if (storagePermissionStatus != PermissionStatus.Granted)
+            if (DeviceInfo.Platform == DevicePlatform.iOS || DeviceInfo.Platform == DevicePlatform.MacCatalyst)
             {
-                await App.Current.MainPage.DisplayAlert("Storage Permission", "Storage permission denied", "OK");
-                return;
+                PermissionStatus filePermissionStatus = await Permissions.CheckStatusAsync<Permissions.Photos>();
+
+                if (filePermissionStatus != PermissionStatus.Granted)
+                {
+                    filePermissionStatus = await Permissions.RequestAsync<Permissions.Photos>();
+                }
+
+                if (filePermissionStatus != PermissionStatus.Granted)
+                {
+                    await App.Current.MainPage.DisplayAlert("Photo Permission", "Photo library permission denied", "OK");
+                    return;
+                }
+            }
+            else
+            {
+                PermissionStatus storagePermissionStatus = await CheckAndRequestStoragePermission();
+
+                if (storagePermissionStatus != PermissionStatus.Granted)
+                {
+                    await App.Current.MainPage.DisplayAlert("Storage Permission", "Storage permission denied", "OK");
+                    return;
+                }
             }
 
-            // Pick a file from the file system
             FileResult file = await FilePicker.Default.PickAsync();
 
             if (file != null)
             {
-                // Save the file into local storage
                 string localFilePath = Path.Combine(FileSystem.CacheDirectory, file.FileName);
 
                 using Stream sourceStream = await file.OpenReadAsync();
@@ -171,29 +196,28 @@ namespace MAUIPermissions.ViewModels
         /// </summary>
         private async Task<PermissionStatus> CheckAndRequestStoragePermission()
         {
-            // For Android 11 and above, we need to request READ_MEDIA_IMAGES for accessing photos
+            PermissionStatus status;
+
             if (DeviceInfo.Platform == DevicePlatform.Android && DeviceInfo.Version.Major >= 11)
             {
-                var status = await Permissions.CheckStatusAsync<Permissions.Media>();
+                status = await Permissions.CheckStatusAsync<Permissions.Media>();
 
                 if (status != PermissionStatus.Granted)
                 {
                     status = await Permissions.RequestAsync<Permissions.Media>();
                 }
-
-                return status;
             }
             else
             {
-                var status = await Permissions.CheckStatusAsync<Permissions.StorageRead>();
+                status = await Permissions.CheckStatusAsync<Permissions.StorageRead>();
 
                 if (status != PermissionStatus.Granted)
                 {
                     status = await Permissions.RequestAsync<Permissions.StorageRead>();
                 }
-
-                return status;
             }
+
+            return status;
         }
 
         #endregion
