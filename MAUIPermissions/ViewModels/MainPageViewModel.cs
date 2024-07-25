@@ -97,8 +97,41 @@ namespace MAUIPermissions.ViewModels
         /// </summary>
         private async Task AttachFromGallery()
         {
-            // Implement similar logic as AttachFromCamera for gallery selection
-            // Add code for handling gallery attachment
+            // Check and request storage permission if not granted
+            PermissionStatus storagePermissionStatus = await Permissions.CheckStatusAsync<Permissions.StorageRead>();
+
+            if (storagePermissionStatus != PermissionStatus.Granted)
+            {
+                storagePermissionStatus = await Permissions.RequestAsync<Permissions.StorageRead>();
+            }
+
+            if (storagePermissionStatus != PermissionStatus.Granted)
+            {
+                await App.Current.MainPage.DisplayAlert("Storage Permission", "Storage permission denied", "OK");
+                return;
+            }
+
+            // Pick a photo from the gallery
+            FileResult photo = await MediaPicker.Default.PickPhotoAsync();
+
+            if (photo != null)
+            {
+                // Save the file into local storage
+                string localFilePath = Path.Combine(FileSystem.CacheDirectory, photo.FileName);
+
+                using Stream sourceStream = await photo.OpenReadAsync();
+                using FileStream localFileStream = File.OpenWrite(localFilePath);
+
+                await sourceStream.CopyToAsync(localFileStream);
+
+                Attachments.Add(new FileItem
+                {
+                    Name = photo.FileName,
+                    Path = localFilePath,
+                    ImageSource = ImageSource.FromFile(localFilePath),
+                    IsImage = true
+                });
+            }
         }
 
         /// <summary>
@@ -106,8 +139,41 @@ namespace MAUIPermissions.ViewModels
         /// </summary>
         private async Task AttachFromFile()
         {
-            // Implement similar logic as AttachFromCamera for file selection
-            // Add code for handling file attachment
+            // Check and request storage permission if not granted
+            PermissionStatus storagePermissionStatus = await Permissions.CheckStatusAsync<Permissions.StorageRead>();
+
+            if (storagePermissionStatus != PermissionStatus.Granted)
+            {
+                storagePermissionStatus = await Permissions.RequestAsync<Permissions.StorageRead>();
+            }
+
+            if (storagePermissionStatus != PermissionStatus.Granted)
+            {
+                await App.Current.MainPage.DisplayAlert("Storage Permission", "Storage permission denied", "OK");
+                return;
+            }
+
+            // Pick a file from the file system
+            FileResult file = await FilePicker.Default.PickAsync();
+
+            if (file != null)
+            {
+                // Save the file into local storage
+                string localFilePath = Path.Combine(FileSystem.CacheDirectory, file.FileName);
+
+                using Stream sourceStream = await file.OpenReadAsync();
+                using FileStream localFileStream = File.OpenWrite(localFilePath);
+
+                await sourceStream.CopyToAsync(localFileStream);
+
+                Attachments.Add(new FileItem
+                {
+                    Name = file.FileName,
+                    Path = localFilePath,
+                    ImageSource = null,
+                    IsImage = false
+                });
+            }
         }
 
         #endregion

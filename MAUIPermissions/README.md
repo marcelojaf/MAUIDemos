@@ -15,9 +15,11 @@ For that, we will have an app to add Attachments of three types:
 Enable these 3 permissions in your AndroidManifest.xml file:
 
 CAMERA
+READ_EXTERNAL_STORAGE
 READ_MEDIA_IMAGES
 READ_MEDIA_VIDEO
 READ_MEDIA_AUDIO
+WRITE_EXTERNAL_STORAGE
 
 Add this to the <manifest> node of your AndroidManifest.xml file:
 ```
