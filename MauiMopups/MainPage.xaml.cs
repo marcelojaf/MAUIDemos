@@ -1,4 +1,6 @@
-﻿namespace MauiMopups
+﻿using Mopups.Services;
+
+namespace MauiMopups
 {
     public partial class MainPage : ContentPage
     {
@@ -19,6 +21,11 @@
                 CounterBtn.Text = $"Clicked {count} times";
 
             SemanticScreenReader.Announce(CounterBtn.Text);
+        }
+
+        private void BtnPopup_Clicked(object sender, EventArgs e)
+        {
+            MopupService.Instance.PushAsync(new MyPopupPage());
         }
     }
 

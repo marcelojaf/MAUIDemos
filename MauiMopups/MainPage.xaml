@@ -32,6 +32,7 @@
 
             <Button
                 x:Name="BtnPopup"
+                Clicked="BtnPopup_Clicked"
                 HorizontalOptions="Fill"
                 Text="Open Popup" />
         </VerticalStackLayout>

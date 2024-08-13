@@ -63,4 +63,10 @@
 		<PackageReference Include="Mopups" Version="1.3.1" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <MauiXaml Update="MyPopupPage.xaml">
+	    <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+	  </MauiXaml>
+	</ItemGroup>
+
 </Project>
