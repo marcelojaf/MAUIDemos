@@ -65,7 +65,7 @@ namespace MAUIPermissions.ViewModels
 
             if (MediaPicker.Default.IsCaptureSupported)
             {
-                FileResult photo = await MediaPicker.Default.CapturePhotoAsync();
+                FileResult? photo = await MediaPicker.Default.CapturePhotoAsync();
 
                 if (photo != null)
                 {
